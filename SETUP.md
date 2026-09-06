@@ -34,7 +34,7 @@ Pick the client you are using:
    ```
 2. **Register the Binance Agent OS MCP Server**:
    ```bash
-   agy mcp add --transport http binance-agent-os https://agent.binance.com/mcp/agentic
+   agy mcp add --type http binance-agent-os https://agent.binance.com/mcp/agentic
    ```
 3. **Launch AGY & Authenticate**:
    ```bash
