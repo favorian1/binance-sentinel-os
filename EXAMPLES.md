@@ -64,12 +64,12 @@ Sentinel: Buy 50 BNB right now.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Order: BUY 50 BNB
 Estimated Notional: ~$29,715 USDT
-Policy Cap: $50 USDT per trade
+Policy Cap: $10 USDT per trade
 
 Reason: Notional exceeds maximum per-trade ceiling.
 Action: Order blocked before reaching Binance.
 
-Suggestion: Split into smaller DCA entries within the $50 cap.
+Suggestion: Split into smaller DCA entries within the $10 cap.
 ```
 
 ---

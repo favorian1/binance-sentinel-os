@@ -10,8 +10,8 @@ Acts as the automated compliance officer for Antigravity before any non-idempote
 ## Deterministic Rules & Ceilings
 
 ### Spot Rules
-- **Max Notional Per Spot Order**: $50.00 USDT.
-- **24h Spot Aggregate Spend Cap**: $250.00 USDT.
+- **Max Notional Per Spot Order**: $10.00 USDT.
+- **24h Spot Aggregate Spend Cap**: $50.00 USDT.
 - **Allowed Spot Universe**: `BNBUSDT`, `BTCUSDT`, `ETHUSDT`, `SOLUSDT`.
 
 ### Futures Rules

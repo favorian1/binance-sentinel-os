@@ -85,7 +85,7 @@ flowchart TB
 | :--- | :--- | :--- |
 | **`binance-sentinel`** | Master Mandate | Executive command orchestrator, sub-account boundary enforcement, emergency purge across all markets. |
 | **`binance-market-intelligence`** | Analysis | Spot klines, Futures mark price, funding rates (`futures_usds.premiumIndexKlineData`), orderbook depth (`spot.depth`), and EMA/RSI momentum. |
-| **`binance-risk-guardrails`** | Safety | Pre-trade deterministic compliance: $50 trade cap, $250 24h spend limit, 5x leverage ceiling, ISOLATED margin floor. |
+| **`binance-risk-guardrails`** | Safety | Pre-trade deterministic compliance: $10 trade cap, $50 24h spend limit, 5x leverage ceiling, ISOLATED margin floor. |
 | **`binance-portfolio-rebalancer`** | Optimization | Balance audits (`spot.getAccount`), portfolio weight divergence tracking, and planned DCA allocation. |
 | **`binance-derivatives-engine`** | Execution | USDⓈ-M & COIN-M Futures leverage configuration, position entries, cross/isolated margin, and zero-slippage Convert. |
 | **`binance-pnl-tracker`** | Attribution | Realized/unrealized P&L accounting via `spot.myTrades`, 30-day equity snapshots (`wallet.dailyAccountSnapshot`), and win-rate analysis. |
