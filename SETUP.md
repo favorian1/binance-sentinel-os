@@ -1,156 +1,174 @@
-# 🚀 Setup Guide — Works with AGY, Claude Code, Cursor, VS Code & More
+# 🚀 Full Setup Guide — From Zero to Running Binance Sentinel-OS
 
-Binance Sentinel-OS is built on the **Model Context Protocol (MCP)** — an open standard.
-This means it works with **any MCP-compatible AI client**, not just Antigravity.
-
----
-
-## What You Need (For Any Client)
-
-| Requirement | Where to Get It |
-| :--- | :--- |
-| **Binance Account** with Agent OS enabled | [binance.com/agent-os](https://www.binance.com/agent-os) |
-| **Binance Agentic Sub-Account** (isolated) | [Create one here](https://www.binance.com/en/my/sub-account/management) |
-| **Sub-Account funded** (any USDT amount) | [Transfer here](https://www.binance.com/en/my/sub-account/asset-management/transfer?asset=USDT) |
-| **Your preferred AI client** (see below) | AGY / Claude Code / Cursor / VS Code |
+This guide starts from scratch. Even if you have never used an AI coding tool or MCP before, follow these steps and you will have a live Binance AI agent running in under 15 minutes.
 
 ---
 
-## Choose Your AI Client
+## 🧭 Overview — What You Are Setting Up
 
-### Option A — Google Antigravity (AGY)
+```
+Binance Account  +  AI Client (AGY / Claude Code / Cursor)  +  This Repo
+        ↓                        ↓                                  ↓
+  Your sub-account         The AI brain                    The trading rules
+  where trades happen      that talks to Binance            & strategies
+```
 
-**Step 1: Clone the repo**
+You need **three things**:
+1. A Binance account with an isolated sub-account (where your funds live safely)
+2. An AI client installed on your computer (pick one: AGY, Claude Code, or Cursor)
+3. This repository cloned to your machine (the skills and rules that make the AI a Binance agent)
+
+---
+
+## PART 1 — Set Up Your Binance Account (5 Minutes)
+
+### Step 1.1 — Create or Log In to Binance
+Go to [binance.com](https://www.binance.com) and create an account if you don't have one.
+Complete identity verification (KYC) if required.
+
+### Step 1.2 — Enable Binance Agent OS
+Go to [binance.com/agent-os](https://www.binance.com/agent-os) and enable Agent OS on your account.
+This unlocks the ability for AI clients to connect to your Binance exchange.
+
+### Step 1.3 — Create an Agentic Sub-Account
+Go to [Binance Sub-Account Management](https://www.binance.com/en/my/sub-account/management) and create a new sub-account dedicated to the AI agent.
+
+> ⚠️ **Important**: This sub-account is isolated from your main account. The AI agent can ONLY trade within it — it cannot withdraw funds or touch your main account.
+
+### Step 1.4 — Fund the Sub-Account
+Transfer some USDT into the sub-account at [Sub-Account Transfer](https://www.binance.com/en/my/sub-account/asset-management/transfer?asset=USDT).
+Even $10–$20 USDT is enough to test the agent.
+
+✅ **Binance is ready.**
+
+---
+
+## PART 2 — Install Your AI Client (5 Minutes)
+
+Pick ONE of the following. All three work with this project.
+
+---
+
+### Option A — Google Antigravity (AGY) ⭐ Recommended
+
+**Step 2A.1 — Download and install AGY**
+
+Go to [antigravity.dev](https://antigravity.dev), download the installer for your OS (Windows / macOS / Linux) and install it.
+
+**Step 2A.2 — Create an AGY account**
+
+Open AGY after installation. Sign in with your Google account when prompted.
+
+**Step 2A.3 — Confirm AGY is working**
 ```bash
-git clone https://github.com/favorian1/binance-sentinel-os.git
-cd binance-sentinel-os
+agy --version
 ```
-
-**Step 2: Install the Binance Sentinel skills**
-```bash
-cp -r .agents/skills/* ~/.agents/skills/
-```
-Confirm it worked:
-```bash
-ls ~/.agents/skills/ | grep binance
-# Should list all 5 binance-* skills
-```
-
-**Step 3: Authenticate Binance Agent OS MCP**
-```bash
-agy mcp auth binance-agent-os
-```
-A browser window opens → Log in to your Binance sub-account → Approve Agent OS scope.
-
-**Step 4: Verify it's live**
-Open AGY and type:
-```
-Sentinel: Get the current price of BNBUSDT.
-```
-You should see a live BNB price returned. ✅
+You should see a version number printed. ✅
 
 ---
 
 ### Option B — Claude Code (Anthropic)
 
-**Step 1: Clone the repo**
+**Step 2B.1 — Create an Anthropic account**
+
+Go to [claude.ai](https://claude.ai) and sign up for a free account.
+
+**Step 2B.2 — Install Claude Code**
+
+Follow the installation guide at [docs.anthropic.com/claude-code](https://docs.anthropic.com/en/docs/claude-code).
+
 ```bash
-git clone https://github.com/favorian1/binance-sentinel-os.git
-cd binance-sentinel-os
+# macOS / Linux
+npm install -g @anthropic-ai/claude-code
+
+# Then log in
+claude login
 ```
 
-**Step 2: Add Binance Agent OS MCP to Claude Code**
-
-Edit your Claude Code MCP config file:
-- **macOS/Linux**: `~/.config/claude/claude_desktop_config.json`
-- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-
-Add this entry:
-```json
-{
-  "mcpServers": {
-    "binance-agent-os": {
-      "type": "remote",
-      "url": "https://agent.binance.com/mcp/agentic",
-      "auth": {
-        "type": "oauth"
-      }
-    }
-  }
-}
+**Step 2B.3 — Confirm Claude Code is working**
+```bash
+claude --version
 ```
-
-**Step 3: Restart Claude Code and authenticate**
-
-When Claude Code restarts, it will prompt you to authorize the Binance Agent OS OAuth connection. Log in with your Binance sub-account.
-
-**Step 4: Load the Sentinel system prompt**
-
-Copy the contents of `.agents/skills/binance-sentinel/SKILL.md` and paste it as a **System Prompt** or **Project Instruction** in your Claude Code project settings.
-
-**Step 5: Verify**
-In Claude Code, type:
-```
-Sentinel: Get the current price of BNBUSDT.
-```
-You should see a live BNB price returned. ✅
+You should see a version number printed. ✅
 
 ---
 
 ### Option C — Cursor AI
 
-**Step 1: Clone the repo**
+**Step 2C.1 — Download and install Cursor**
+
+Go to [cursor.com](https://cursor.com), download the installer for your OS and install it.
+
+**Step 2C.2 — Create a Cursor account**
+
+Open Cursor and sign up with your email or GitHub account when prompted.
+
+**Step 2C.3 — Confirm Cursor is working**
+
+Cursor opens as a code editor. You should see the AI chat panel on the right side. ✅
+
+---
+
+## PART 3 — Clone This Repository (1 Minute)
+
+Open your terminal (or Cursor's built-in terminal) and run:
+
 ```bash
 git clone https://github.com/favorian1/binance-sentinel-os.git
 cd binance-sentinel-os
 ```
 
-**Step 2: Add Binance Agent OS MCP to Cursor**
-
-Go to **Cursor Settings → MCP → Add Server** and enter:
-
-```json
-{
-  "binance-agent-os": {
-    "type": "remote",
-    "url": "https://agent.binance.com/mcp/agentic",
-    "auth": { "type": "oauth" }
-  }
-}
-```
-
-**Step 3: Authenticate**
-
-Cursor will prompt you to authorize via Binance OAuth. Use your Binance sub-account.
-
-**Step 4: Add the Sentinel rules as a Cursor Rule**
-
-Copy the content of `.agents/skills/binance-sentinel/SKILL.md` into a `.cursorrules` file in the project root:
+Confirm it worked:
 ```bash
-cp .agents/skills/binance-sentinel/SKILL.md .cursorrules
+ls
 ```
-
-**Step 5: Verify**
-In Cursor chat:
-```
-Sentinel: Get the current price of BNBUSDT.
-```
-✅
+You should see: `README.md`, `SETUP.md`, `DEMO_WALKTHROUGH.md`, `.agents/`  ✅
 
 ---
 
-### Option D — VS Code (with MCP Extension)
+## PART 4 — Connect Binance Agent OS MCP to Your AI Client
 
-**Step 1: Install the MCP extension for VS Code**
+> MCP (Model Context Protocol) is the bridge that lets your AI client talk directly to Binance.
+> You do this once and it stays connected.
 
-Search for **"MCP Client"** or **"Model Context Protocol"** in the VS Code Extensions marketplace and install it.
+---
 
-**Step 2: Configure the Binance Agent OS server**
+### If you chose AGY:
 
-Open `.vscode/settings.json` in your project and add:
+**Step 4A.1 — Install the Binance Sentinel skills**
+```bash
+cp -r .agents/skills/* ~/.agents/skills/
+```
+
+Confirm:
+```bash
+ls ~/.agents/skills/ | grep binance
+```
+Should list all 5 `binance-*` skills. ✅
+
+**Step 4A.2 — Authenticate Binance Agent OS**
+```bash
+agy mcp auth binance-agent-os
+```
+A browser window opens → log into your Binance account → approve the Agent OS scope for your sub-account. ✅
+
+---
+
+### If you chose Claude Code:
+
+**Step 4B.1 — Open your Claude MCP config file**
+
+- macOS / Linux: `~/.config/claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+
+If the file does not exist, create it.
+
+**Step 4B.2 — Add the Binance MCP server**
+
+Paste this into the file:
 ```json
 {
-  "mcp.servers": {
+  "mcpServers": {
     "binance-agent-os": {
       "type": "remote",
       "url": "https://agent.binance.com/mcp/agentic",
@@ -160,44 +178,71 @@ Open `.vscode/settings.json` in your project and add:
 }
 ```
 
-**Step 3: Authenticate**
+**Step 4B.3 — Restart Claude Code and authenticate**
+```bash
+claude
+```
+Claude Code will prompt you to authorize Binance → log in → approve. ✅
 
-Follow the OAuth popup to connect your Binance sub-account.
+**Step 4B.4 — Load the Sentinel rules**
 
-**Step 4: Load Sentinel instructions**
-
-Open the MCP extension panel and paste the contents of `.agents/skills/binance-sentinel/SKILL.md` as the system context.
+Start a new Claude Code session and paste the full contents of `.agents/skills/binance-sentinel/SKILL.md` as your system prompt or project instruction. ✅
 
 ---
 
-### Option E — Any Other MCP-Compatible Client
+### If you chose Cursor:
 
-The Binance Agent OS MCP server endpoint is:
-```
-https://agent.binance.com/mcp/agentic
-```
-Authentication: **OAuth 2.0** (log in with your Binance account)
+**Step 4C.1 — Open Cursor Settings → MCP**
 
-1. Add the above URL as a **remote MCP server** in your client settings.
-2. Authenticate with your Binance Agentic Sub-Account.
-3. Load the strategy rules from `.agents/skills/binance-sentinel/SKILL.md` as a system prompt.
-4. Start prompting!
+In Cursor: go to **Settings (⚙️) → Features → MCP Servers → Add New Server**
+
+**Step 4C.2 — Add the Binance MCP server**
+```json
+{
+  "binance-agent-os": {
+    "type": "remote",
+    "url": "https://agent.binance.com/mcp/agentic",
+    "auth": { "type": "oauth" }
+  }
+}
+```
+Save and restart Cursor. Authorize with your Binance account when prompted. ✅
+
+**Step 4C.3 — Load the Sentinel rules**
+
+Create a `.cursorrules` file in the project root:
+```bash
+cp .agents/skills/binance-sentinel/SKILL.md .cursorrules
+```
+✅
 
 ---
 
-## ✅ Quick Connection Test (All Clients)
+## PART 5 — Verify Everything is Working (All Clients)
 
-Once connected, run this prompt regardless of which client you use:
+Open your AI client and type this exact prompt:
 
 ```
-Sentinel: Get the current price of BNBUSDT and check my sub-account balance.
+Sentinel: Get the current price of BNBUSDT and show my sub-account balance.
 ```
 
-**Expected response:**
-- Live BNB price from `spot.tickerPrice`
-- Sub-account balance from `spot.getAccount`
+**What you should see:**
+- Live BNB price pulled from `spot.tickerPrice`
+- Your sub-account USDT balance from `spot.getAccount`
 
-If both return real data — **you are fully connected and ready.** 🎉
+If both appear — **your Binance AI agent is fully live!** 🎉
+
+---
+
+## PART 6 — Run the Full Demo
+
+Follow the complete prompt-by-prompt script in **[DEMO_WALKTHROUGH.md](./DEMO_WALKTHROUGH.md)** to see:
+
+- 📊 Market analysis across Spot, Futures & funding rates
+- 🛡️ Risk guardrail blocking an oversized trade
+- 📈 Safe derivatives position with 3x leverage
+- 🔄 Zero-slippage token conversion
+- 🚨 Emergency stop cancelling all open orders instantly
 
 ---
 
@@ -205,15 +250,11 @@ If both return real data — **you are fully connected and ready.** 🎉
 
 | Problem | Fix |
 | :--- | :--- |
-| `Unauthorized` / auth failed | Re-authenticate Binance OAuth in your client |
-| Browser does not open | Copy the auth URL from terminal and open manually |
-| Sub-account balance is 0 | [Transfer USDT to sub-account](https://www.binance.com/en/my/sub-account/asset-management/transfer) |
-| `Permission denied` on a tool | Enable Spot/Futures/Margin permissions in Binance API settings |
-| Rate limit error `-1003` | Wait 30–60 seconds and retry |
-| Skills not loading in AGY | Restart AGY after running `cp -r .agents/skills/* ~/.agents/skills/` |
-
----
-
-## 📖 Next Step
-
-Follow the **[DEMO_WALKTHROUGH.md](./DEMO_WALKTHROUGH.md)** for the full 8-phase interaction demo across Spot, Futures, Margin, Convert, and emergency stop — works with any of the clients above.
+| `agy: command not found` | Re-install AGY from [antigravity.dev](https://antigravity.dev) |
+| `claude: command not found` | Run `npm install -g @anthropic-ai/claude-code` again |
+| `Unauthorized` when calling a tool | Re-run auth: `agy mcp auth binance-agent-os` |
+| Browser does not open during auth | Copy the URL from terminal and open it manually in your browser |
+| Sub-account balance shows 0 | Transfer USDT at [Binance Sub-Account Transfer](https://www.binance.com/en/my/sub-account/asset-management/transfer) |
+| Permission error on Futures/Margin tools | Enable Futures & Margin Trading permissions in Binance API settings |
+| Rate limit error `-1003` | Wait 30–60 seconds and retry the prompt |
+| Skills not appearing in AGY | Restart AGY after running the `cp -r` command |
