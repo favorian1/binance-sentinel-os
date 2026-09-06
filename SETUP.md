@@ -37,7 +37,7 @@ Go to [Binance Sub-Account Management](https://www.binance.com/en/my/sub-account
 
 ### Step 1.4 — Fund the Sub-Account
 Transfer some USDT into the sub-account at [Sub-Account Transfer](https://www.binance.com/en/my/sub-account/asset-management/transfer?asset=USDT).
-Even $10–$20 USDT is enough to test the agent.
+Start with $10–$20 USDT for initial live agent trading.
 
 ✅ **Binance is ready.**
 

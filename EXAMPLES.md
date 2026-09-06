@@ -78,7 +78,7 @@ Suggestion: Split into smaller DCA entries within the $10 cap.
 
 **Prompt:**
 ```
-Sentinel: Set up a 3x isolated long position on BNBUSDT futures with a small test entry.
+Sentinel: Set up a 3x isolated long position on BNBUSDT futures with an initial live entry.
 ```
 
 **Agent Response:**
