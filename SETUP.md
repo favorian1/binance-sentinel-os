@@ -1,140 +1,203 @@
-# 🚀 Setup Guide — Run Binance Sentinel-OS in Under 10 Minutes
+# 🚀 Setup Guide — Works with AGY, Claude Code, Cursor, VS Code & More
 
-Follow these steps exactly. Each step has a confirmation check so you know it worked before moving to the next.
+Binance Sentinel-OS is built on the **Model Context Protocol (MCP)** — an open standard.
+This means it works with **any MCP-compatible AI client**, not just Antigravity.
 
 ---
 
-## What You Need Before Starting
+## What You Need (For Any Client)
 
 | Requirement | Where to Get It |
 | :--- | :--- |
-| **Google Antigravity (AGY) CLI** | Download at [antigravity.dev](https://antigravity.dev) |
-| **Binance Account** with Agent OS enabled | Enable at [binance.com/agent-os](https://www.binance.com/agent-os) |
-| **Binance Agentic Sub-Account** | Create one at [Binance Sub-Accounts](https://www.binance.com/en/my/sub-account/management) |
-| **Funded Sub-Account** (any amount of USDT) | Transfer at [binance.com Sub-Account Transfer](https://www.binance.com/en/my/sub-account/asset-management/transfer) |
+| **Binance Account** with Agent OS enabled | [binance.com/agent-os](https://www.binance.com/agent-os) |
+| **Binance Agentic Sub-Account** (isolated) | [Create one here](https://www.binance.com/en/my/sub-account/management) |
+| **Sub-Account funded** (any USDT amount) | [Transfer here](https://www.binance.com/en/my/sub-account/asset-management/transfer?asset=USDT) |
+| **Your preferred AI client** (see below) | AGY / Claude Code / Cursor / VS Code |
 
 ---
 
-## ✅ Step 1 — Clone the Repository
+## Choose Your AI Client
 
-Open your terminal and run:
+### Option A — Google Antigravity (AGY)
 
+**Step 1: Clone the repo**
 ```bash
 git clone https://github.com/favorian1/binance-sentinel-os.git
 cd binance-sentinel-os
 ```
 
-**How to confirm it worked:**
-```bash
-ls
-```
-You should see: `README.md`, `SETUP.md`, `DEMO_WALKTHROUGH.md`, `.agents/`
-
----
-
-## ✅ Step 2 — Install the 5 Binance Sentinel Skills into Antigravity
-
+**Step 2: Install the Binance Sentinel skills**
 ```bash
 cp -r .agents/skills/* ~/.agents/skills/
 ```
-
-**How to confirm it worked:**
+Confirm it worked:
 ```bash
 ls ~/.agents/skills/ | grep binance
-```
-You should see all 5 skills listed:
-```
-binance-derivatives-engine
-binance-market-intelligence
-binance-portfolio-rebalancer
-binance-risk-guardrails
-binance-sentinel
+# Should list all 5 binance-* skills
 ```
 
----
-
-## ✅ Step 3 — Authenticate Binance Agent OS MCP
-
-Make sure you are **logged into your Binance account** in your browser first, then run:
-
+**Step 3: Authenticate Binance Agent OS MCP**
 ```bash
 agy mcp auth binance-agent-os
 ```
+A browser window opens → Log in to your Binance sub-account → Approve Agent OS scope.
 
-**What happens:**
-1. A browser window or authorization URL opens.
-2. Log in with the Binance account that has an Agentic Sub-Account.
-3. Approve the **Agentic Sub-Account** scope when prompted.
-4. You will see a success confirmation in the terminal.
-
-> ⚠️ **Use an isolated Binance Sub-Account — never your main account.**
-> The agent has NO withdrawal permissions by design.
-
----
-
-## ✅ Step 4 — Open Antigravity and Verify the Connection
-
-Open AGY in your terminal:
-
-```bash
-agy
-```
-
-Then type this prompt to verify the MCP is live:
-
+**Step 4: Verify it's live**
+Open AGY and type:
 ```
 Sentinel: Get the current price of BNBUSDT.
 ```
-
-**What to expect:**
-AGY calls `spot.tickerPrice` via Binance Agent OS and returns the live BNB price — something like:
-```
-BNB/USDT: $594.30
-```
-
-If you see a real price — **the agent is live and connected!** 🎉
+You should see a live BNB price returned. ✅
 
 ---
 
-## ✅ Step 5 — Check Your Sub-Account Balance
+### Option B — Claude Code (Anthropic)
 
-```
-Sentinel: Check my sub-account balance and show available funds.
+**Step 1: Clone the repo**
+```bash
+git clone https://github.com/favorian1/binance-sentinel-os.git
+cd binance-sentinel-os
 ```
 
-**What to expect:**
-AGY calls `spot.getAccount` and returns your sub-account assets and free USDT balance.
+**Step 2: Add Binance Agent OS MCP to Claude Code**
+
+Edit your Claude Code MCP config file:
+- **macOS/Linux**: `~/.config/claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+Add this entry:
+```json
+{
+  "mcpServers": {
+    "binance-agent-os": {
+      "type": "remote",
+      "url": "https://agent.binance.com/mcp/agentic",
+      "auth": {
+        "type": "oauth"
+      }
+    }
+  }
+}
+```
+
+**Step 3: Restart Claude Code and authenticate**
+
+When Claude Code restarts, it will prompt you to authorize the Binance Agent OS OAuth connection. Log in with your Binance sub-account.
+
+**Step 4: Load the Sentinel system prompt**
+
+Copy the contents of `.agents/skills/binance-sentinel/SKILL.md` and paste it as a **System Prompt** or **Project Instruction** in your Claude Code project settings.
+
+**Step 5: Verify**
+In Claude Code, type:
+```
+Sentinel: Get the current price of BNBUSDT.
+```
+You should see a live BNB price returned. ✅
 
 ---
 
-## ✅ Step 6 — Run the Full Demo
+### Option C — Cursor AI
 
-Follow the complete prompt-by-prompt script in **[DEMO_WALKTHROUGH.md](./DEMO_WALKTHROUGH.md)** to experience:
+**Step 1: Clone the repo**
+```bash
+git clone https://github.com/favorian1/binance-sentinel-os.git
+cd binance-sentinel-os
+```
 
-- 📊 Market intelligence across Spot, Futures & funding rates
-- 🛡️ Risk guardrail interception (watch AGY reject a 20x leverage request)
-- 📈 Derivatives setup (3x isolated leverage on BNB futures)
-- 🔄 Zero-slippage Convert (USDT → BNB instantly)
-- 🚨 Emergency stop across Spot, Futures & Margin simultaneously
+**Step 2: Add Binance Agent OS MCP to Cursor**
+
+Go to **Cursor Settings → MCP → Add Server** and enter:
+
+```json
+{
+  "binance-agent-os": {
+    "type": "remote",
+    "url": "https://agent.binance.com/mcp/agentic",
+    "auth": { "type": "oauth" }
+  }
+}
+```
+
+**Step 3: Authenticate**
+
+Cursor will prompt you to authorize via Binance OAuth. Use your Binance sub-account.
+
+**Step 4: Add the Sentinel rules as a Cursor Rule**
+
+Copy the content of `.agents/skills/binance-sentinel/SKILL.md` into a `.cursorrules` file in the project root:
+```bash
+cp .agents/skills/binance-sentinel/SKILL.md .cursorrules
+```
+
+**Step 5: Verify**
+In Cursor chat:
+```
+Sentinel: Get the current price of BNBUSDT.
+```
+✅
 
 ---
 
-## How It Works Under The Hood
+### Option D — VS Code (with MCP Extension)
+
+**Step 1: Install the MCP extension for VS Code**
+
+Search for **"MCP Client"** or **"Model Context Protocol"** in the VS Code Extensions marketplace and install it.
+
+**Step 2: Configure the Binance Agent OS server**
+
+Open `.vscode/settings.json` in your project and add:
+```json
+{
+  "mcp.servers": {
+    "binance-agent-os": {
+      "type": "remote",
+      "url": "https://agent.binance.com/mcp/agentic",
+      "auth": { "type": "oauth" }
+    }
+  }
+}
+```
+
+**Step 3: Authenticate**
+
+Follow the OAuth popup to connect your Binance sub-account.
+
+**Step 4: Load Sentinel instructions**
+
+Open the MCP extension panel and paste the contents of `.agents/skills/binance-sentinel/SKILL.md` as the system context.
+
+---
+
+### Option E — Any Other MCP-Compatible Client
+
+The Binance Agent OS MCP server endpoint is:
+```
+https://agent.binance.com/mcp/agentic
+```
+Authentication: **OAuth 2.0** (log in with your Binance account)
+
+1. Add the above URL as a **remote MCP server** in your client settings.
+2. Authenticate with your Binance Agentic Sub-Account.
+3. Load the strategy rules from `.agents/skills/binance-sentinel/SKILL.md` as a system prompt.
+4. Start prompting!
+
+---
+
+## ✅ Quick Connection Test (All Clients)
+
+Once connected, run this prompt regardless of which client you use:
 
 ```
-You type a prompt in AGY
-         ↓
-AGY reads the Binance Sentinel skill rules (from .agents/skills/)
-         ↓
-AGY reasons about which Binance tool to call and in what order
-         ↓
-Binance Agent OS MCP executes the tool against your sub-account
-         ↓
-AGY synthesizes the result and responds in plain language
+Sentinel: Get the current price of BNBUSDT and check my sub-account balance.
 ```
 
-> No external servers. No API keys in code. No bots running in the background.
-> **The agent IS Antigravity, guided by the skill files in this repository.**
+**Expected response:**
+- Live BNB price from `spot.tickerPrice`
+- Sub-account balance from `spot.getAccount`
+
+If both return real data — **you are fully connected and ready.** 🎉
 
 ---
 
@@ -142,9 +205,15 @@ AGY synthesizes the result and responds in plain language
 
 | Problem | Fix |
 | :--- | :--- |
-| `Unauthorized` on first tool call | Re-run `agy mcp auth binance-agent-os` and re-approve |
-| Browser does not open during auth | Copy the URL from the terminal and open it manually |
-| Sub-account balance shows 0 | Transfer funds at [Sub-Account Transfer](https://www.binance.com/en/my/sub-account/asset-management/transfer) |
-| `Permission denied` on a tool | Enable Spot/Futures/Margin Trading on your Binance API key settings |
-| Rate limit error code `-1003` | Wait 30–60 seconds and retry the prompt |
-| Skills not appearing in AGY | Restart AGY after copying the skill files |
+| `Unauthorized` / auth failed | Re-authenticate Binance OAuth in your client |
+| Browser does not open | Copy the auth URL from terminal and open manually |
+| Sub-account balance is 0 | [Transfer USDT to sub-account](https://www.binance.com/en/my/sub-account/asset-management/transfer) |
+| `Permission denied` on a tool | Enable Spot/Futures/Margin permissions in Binance API settings |
+| Rate limit error `-1003` | Wait 30–60 seconds and retry |
+| Skills not loading in AGY | Restart AGY after running `cp -r .agents/skills/* ~/.agents/skills/` |
+
+---
+
+## 📖 Next Step
+
+Follow the **[DEMO_WALKTHROUGH.md](./DEMO_WALKTHROUGH.md)** for the full 8-phase interaction demo across Spot, Futures, Margin, Convert, and emergency stop — works with any of the clients above.
