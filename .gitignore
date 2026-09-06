@@ -1,0 +1,14 @@
+# Secrets and Credentials
+.env
+.env.*
+*.token
+*.session
+*.key
+*.pem
+mcp_oauth_tokens.json
+credentials.json
+
+# Cache & logs
+*.log
+.cache/
+.DS_Store
