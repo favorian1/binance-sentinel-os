@@ -1,0 +1,11 @@
+{
+  "mcp.servers": {
+    "binance-agent-os": {
+      "type": "remote",
+      "url": "https://agent.binance.com/mcp/agentic",
+      "auth": {
+        "type": "oauth"
+      }
+    }
+  }
+}
