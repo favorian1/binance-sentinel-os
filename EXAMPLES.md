@@ -134,3 +134,39 @@ Cancelling all open orders...
 All clear. Agent standing by.
 Total time: 0.8 seconds
 ```
+
+---
+
+## 7. Futures Minimum Contract Enforcement & Alternative Pair Substitution
+
+**Prompt:**
+```
+Sentinel: Open a 3x long position on BTCUSDT futures with $15 USDT margin.
+```
+
+**Agent Response:**
+```
+⚠️ Futures Minimum Contract Requirement Detected
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Target Contract: BTCUSDT Perpetual (3x Leverage)
+User Margin: $15.00 USDT (Total Purchasing Power: $45.00 USDT)
+
+Exchange Rule Check (`futures_usds.exchangeInformation`):
+  • BTCUSDT Minimum Lot Size: 0.001 BTC
+  • At current BTC price ($67,500), minimum notional is $67.50 USDT.
+  • Required Margin: ~$22.50 USDT.
+  • Shortfall: $7.50 USDT.
+
+💡 Intelligent Alternative Pair Recommendations:
+Your $15 USDT margin easily satisfies lower-minimum liquid perpetual pairs:
+
+1. **SOLUSDT** (Current Price: $135.20)
+   • Min order: 0.1 SOL (~$13.52 notional → requires only $4.51 margin at 3x)
+   • 24h Trend: +3.2% | RSI-14: 48.2 (Neutral Accumulation)
+
+2. **DOGEUSDT** (Current Price: $0.125)
+   • Min order: 100 DOGE (~$12.50 notional → requires only $4.17 margin at 3x)
+   • 24h Trend: +1.8% | RSI-14: 51.0
+
+Would you like me to execute a 3x long on **SOLUSDT** instead? [yes/no]
+```
