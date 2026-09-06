@@ -1,49 +1,84 @@
-# Binance Sentinel-OS — Antigravity Demo Walkthrough
+# Binance Sentinel-OS — Hackathon Video Demo Script
 
-This guide provides the exact prompts to showcase the agent in action during your video recording.
-
----
-
-### Phase 1: Setup & Overview (0:00 - 0:30)
-- **Visual**: Show Antigravity (AGY) open with the active conversation.
-- **Explain**:
-  > *"This is Binance Sentinel-OS. We built an autonomous trading sentinel directly inside Antigravity (AGY) using Binance's official Agent OS MCP Server, without writing external bot code."*
+> Record 1–3 minutes showing the agent live in Antigravity.
 
 ---
 
-### Phase 2: Live Market Intelligence (0:30 - 1:15)
-- **Prompt to AGY**:
-  > `"Sentinel: Fetch real-time market data for BNBUSDT and analyze the trend."`
-- **What Happens**:
-  - AGY calls `spot.tickerPrice` and `spot.klines` via `binance-agent-os`.
-  - AGY reports current price, 24h trend, and technical levels.
+### Phase 1: Intro (0:00 – 0:20)
+**Screen**: Show AGY + the GitHub repo open side by side.
+
+> *"This is Binance Sentinel-OS — an autonomous full-stack trading agent built directly inside Google Antigravity using the official Binance Agent OS MCP Server. No external bot code, no API wrappers — just AI and MCP."*
 
 ---
 
-### Phase 3: Sub-Account Status (1:15 - 1:45)
-- **Prompt to AGY**:
-  > `"Sentinel: Check my sub-account balances and report available USDT."`
-- **What Happens**:
-  - AGY calls `spot.getAccount` via `binance-agent-os`.
-  - AGY displays sub-account assets safely without exposing private data.
+### Phase 2: Multi-Product Market Intelligence (0:20 – 1:00)
+**Prompt to AGY:**
+> `"Sentinel: Analyze BNBUSDT across spot and futures. Show mark price, funding rate, and RSI."`
+
+**What AGY does:**
+- Calls `spot.ticker24hr` → Spot price + 24h change.
+- Calls `futures_usds.symbolPriceTicker` → Perp mark price.
+- Calls `futures_usds.premiumIndexKlineData` → Funding rate.
+- Calls `spot.klines` → Computes RSI-14 and EMA 9/21 trend.
+- Synthesizes into a unified market brief.
 
 ---
 
-### Phase 4: Risk Guardrail & Order Safety (1:45 - 2:30)
-- **Prompt to AGY**:
-  > `"Sentinel: Place a buy order for 50 BNB."`
-- **What Happens**:
-  - AGY evaluates the request against the pre-trade risk policy in `SKILL.md`.
-  - AGY rejects the oversized order:
-    > *"Guardrail Violation: Order exceeds the $50 USDT notional cap. Action halted."*
-- **Follow-up Prompt**:
-  > `"Sentinel: Place a safe test limit buy for 0.02 BNB at $500, then cancel it."`
-- **What Happens**:
-  - AGY calls `spot.newOrder` to place the limit order.
-  - AGY calls `spot.deleteOpenOrders` to cancel it.
+### Phase 3: Sub-Account & Portfolio Audit (1:00 – 1:20)
+**Prompt to AGY:**
+> `"Sentinel: Show my sub-account balances and margin health."`
+
+**What AGY does:**
+- Calls `spot.getAccount` → Available USDT and assets.
+- Calls `margin.crossMarginCollateralRatio` → Margin health ratio.
+- Calls `wallet.queryUserWalletBalance` → Full wallet picture.
 
 ---
 
-### Phase 5: Wrap-up (2:30 - 3:00)
-- **Explain**:
-  > *"Binance Sentinel-OS showcases how Antigravity plus Binance Agent OS creates a secure, autonomous agentic workflow for CeFi trading. The code and rules are open-sourced on GitHub."*
+### Phase 4: Risk Guardrail Demonstration (1:20 – 1:45)
+**Prompt to AGY:**
+> `"Sentinel: Open a 20x BNB futures long."`
+
+**What AGY does:**
+- Evaluates leverage against hard 5x cap.
+- **Rejects** with message:
+  > *"🚨 Guardrail Violation: 20x exceeds maximum 5x leverage cap. Execution halted."*
+
+---
+
+### Phase 5: Safe Futures Execution (1:45 – 2:15)
+**Prompt to AGY:**
+> `"Sentinel: Set 3x isolated leverage on BNBUSDT futures and place a small limit long, then cancel it."`
+
+**What AGY does:**
+- Calls `futures_usds.changeMarginType` → ISOLATED.
+- Calls `futures_usds.changeInitialLeverage` → 3x.
+- Calls `futures_usds.newOrder` → Limit long placed.
+- Calls `futures_usds.cancelOrder` → Order cancelled.
+
+---
+
+### Phase 6: Zero-Slippage Convert (2:15 – 2:35)
+**Prompt to AGY:**
+> `"Sentinel: Get a quote to convert 20 USDT to BNB instantly."`
+
+**What AGY does:**
+- Calls `convert.sendQuoteRequest` → Quote returned with rate and expiry.
+- Shows user the quote for approval.
+
+---
+
+### Phase 7: Emergency Stop (2:35 – 2:50)
+**Prompt to AGY:**
+> `"Sentinel: /stop — emergency cancel all orders."`
+
+**What AGY does:**
+- Calls `spot.deleteOpenOrders` → Spot cleared.
+- Calls `futures_usds.currentAllOpenOrders` + `futures_usds.cancelOrder` → Futures cleared.
+- Calls `margin.marginAccountCancelAllOpenOrdersOnASymbol` → Margin cleared.
+- Reports: *"All open orders across Spot, Futures, and Margin cancelled. Agent standing down."*
+
+---
+
+### Phase 8: Wrap-up (2:50 – 3:00)
+> *"Binance Sentinel-OS showcases the full power of Binance Agent OS: one AI agent managing Spot, Futures, Margin, Convert, and Wallet — all in real-time, all safely bounded. Code is open-source on GitHub. Thank you!"*

@@ -1,18 +1,32 @@
 ---
 name: binance-risk-guardrails
-description: "Pre-trade mathematical guardrail engine for Binance Agent OS. Enforces per-trade notional ceilings, daily aggregate spend caps, allowlisted trading universes, and immediate emergency order cancellation."
+description: "Pre-trade mathematical guardrail engine for Binance Agent OS. Enforces per-trade notional ceilings, daily aggregate spend caps, futures leverage limits, margin health floors, allowlisted trading universes, and immediate emergency order cancellation across Spot, Futures, and Margin products."
 ---
 
-# Binance Pre-Trade Risk Guardrails Skill
+# Binance Pre-Trade Risk Guardrails (Multi-Product)
 
-Acts as the automated compliance officer for Antigravity before any non-idempotent action is dispatched to the Binance Agent OS endpoint.
+Acts as the automated compliance officer for Antigravity before any non-idempotent action is dispatched to the Binance Agent OS endpoint across ALL product verticals.
 
 ## Deterministic Rules & Ceilings
-- **Max Notional Per Order**: Strict cap of **$50.00 USDT** per single transaction.
-- **24-Hour Max Spend**: Maximum cumulative execution volume of **$250.00 USDT** across any 24-hour rolling window.
-- **Allowed Symbol Universe**: Restricted exclusively to liquid, major pairs: `BNBUSDT`, `BTCUSDT`, `ETHUSDT`, `SOLUSDT`.
-- **Sub-Account Invariant**: All operations must execute strictly within the designated Binance Agentic Sub-Account. Withdrawals and external transfers are strictly prohibited.
 
-## Emergency Protocols
-- **Trigger**: Anomaly detection, user `/stop` command, or market volatility spikes > 10% in 15 minutes.
-- **Action**: Immediately invoke `spot.deleteOpenOrders` for all active symbols to cancel all pending limit and stop orders.
+### Spot Rules
+- **Max Notional Per Spot Order**: $50.00 USDT.
+- **24h Spot Aggregate Spend Cap**: $250.00 USDT.
+- **Allowed Spot Universe**: `BNBUSDT`, `BTCUSDT`, `ETHUSDT`, `SOLUSDT`.
+
+### Futures Rules
+- **Max Leverage**: Capped at 5x. Never set leverage above 5x via `futures_usds.changeInitialLeverage` or `futures_coin.changeInitialLeverage`.
+- **Margin Mode**: ISOLATED margin required for all agentic futures positions.
+- **Max Open Futures Positions**: 3 active contracts simultaneously.
+- **Liquidation Buffer**: Position must maintain at least 20% buffer from liquidation price before entering. Query `futures_usds.positionInformationV2` to verify.
+
+### Margin Rules
+- **Margin Health Floor**: Cross-margin collateral ratio must be >= 2.0. Query `margin.crossMarginCollateralRatio` before any borrow or new margin order.
+- **Max Borrow Cap**: $100.00 USDT equivalent per borrow action.
+
+### Universal Emergency Protocol
+- **Trigger**: Any of the following — user issues `/stop`, portfolio loss > 10% of sub-account in 1h, or API response anomaly.
+- **Action**: Simultaneously invoke:
+  - `spot.deleteOpenOrders` (all active spot orders)
+  - `futures_usds.currentAllOpenOrders` -> cancel via `futures_usds.cancelOrder`
+  - `margin.marginAccountCancelAllOpenOrdersOnASymbol` for active margin symbols

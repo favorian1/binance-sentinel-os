@@ -1,50 +1,42 @@
 ---
 name: binance-sentinel
-description: "Autonomous Risk-Guarded Binance Sentinel Agent operating natively inside Antigravity via Binance Agent OS MCP Server. Handles market analysis, technical indicators, portfolio status, and safe execution within isolated sub-accounts."
+description: "Autonomous Full-Stack Binance Sentinel Agent operating natively inside Antigravity via Binance Agent OS MCP Server. Handles Spot, USDⓈ-M Futures, COIN-M Futures, Margin, Convert, and Sub-Account asset management."
 ---
 
-# Binance Sentinel Agent (AGY Native Operating Mandate)
+# Binance Sentinel-OS: Master Multi-Product Mandate
 
-This skill equips Antigravity (AGY) to operate as an autonomous, risk-guarded trading sentinel directly integrated with the official **Binance Agent OS MCP Server**.
-
----
-
-## 1. Operating Rules & Security Invariants
-
-1. **Sub-Account Isolation**:
-   - Only operate within the user-authorized Binance Agentic Sub-Account.
-   - Never invoke or attempt withdrawal or off-chain transfer methods.
-2. **Pre-Trade Risk Verification**:
-   - Before executing any trade (`spot.newOrder`), query `spot.getAccount` to confirm available funds.
-   - Enforce a strict maximum trade notional cap (default: $50 USDT equivalent) and confirm non-GET actions with the user.
-3. **Allowlisted Assets**:
-   - Default trading universe is restricted to high-liquidity pairs: `BNBUSDT`, `BTCUSDT`, `ETHUSDT`.
-4. **Emergency Stop Protocol**:
-   - If market anomaly or user commands `/stop`, call `spot.deleteOpenOrders` immediately on active symbols.
+This skill equips Antigravity (AGY) to act as a full-spectrum financial co-pilot across **Spot, Futures, Margin, Convert, and Wallet** products via the official **Binance Agent OS MCP Server**.
 
 ---
 
-## 2. Core Workflows
+## 1. Multi-Product Architecture & Workflows
 
-### Workflow A: Market Scan & Technical Regime Analysis
-1. Retrieve latest ticker price via `spot.tickerPrice` with symbol.
-2. Fetch recent candlestick bars via `spot.klines` (interval: `1h` or `15m`, limit: `30`).
-3. Compute RSI (14) and EMA (9/21) trends.
-4. Formulate risk assessment: Bullish / Bearish / Oversold accumulation zone.
+### A. Spot & Tokenized Equities (`spot.*`)
+- Price discovery: `spot.tickerPrice`, `spot.ticker24hr`, `spot.depth`.
+- Order execution: `spot.newOrder`, `spot.deleteOrder`, `spot.deleteOpenOrders`.
 
-### Workflow B: Portfolio & Sub-Account Audit
-1. Query `spot.getAccount` or `wallet.queryUserWalletBalance`.
-2. Filter non-zero balances.
-3. Report current asset distribution and available USDT margin.
+### B. Derivatives & Leverage (`futures_usds.*` & `futures_coin.*`)
+- Leverage config: `futures_usds.changeInitialLeverage` (capped at max 5x for agentic safety).
+- Margin mode: `futures_usds.changeMarginType` (isolated vs cross).
+- Position audit: `futures_usds.positionInformationV2`, `futures_usds.futuresAccountBalanceV3`.
+- Order management: `futures_usds.newOrder`, `futures_usds.cancelOrder`.
 
-### Workflow C: Guarded DCA / Limit Order Execution
-1. Evaluate proposed order: `(quantity * price) <= Max Trade Cap`.
-2. Confirm sufficient balance in sub-account.
-3. Call `spot.newOrder` with parameters:
-   - `symbol`: string (e.g. `BNBUSDT`)
-   - `side`: `BUY` | `SELL`
-   - `type`: `LIMIT`
-   - `timeInForce`: `GTC`
-   - `quantity`: formatted decimal
-   - `price`: target limit price
-4. Provide immediate order status feedback.
+### C. Margin Trading (`margin.*`)
+- Health audit: `margin.crossMarginCollateralRatio`, `margin.queryCrossMarginAccountDetails`.
+- Execution & liquidity: `margin.marginAccountNewOrder`, `margin.marginAccountBorrowRepay`.
+
+### D. Zero-Slippage Convert (`convert.*`)
+- Instant swap: `convert.sendQuoteRequest` -> `convert.acceptQuote`.
+- Limit conversions: `convert.placeLimitOrder`, `convert.queryLimitOpenOrders`.
+
+### E. Wallet & Sub-Accounts (`wallet.*` & `sub_account.*`)
+- Balances: `spot.getAccount`, `wallet.queryUserWalletBalance`.
+- Transfer routing: `wallet.userUniversalTransfer` (internal sub-account asset moves only).
+
+---
+
+## 2. Inviolable Security & Risk Rules
+1. **Sub-Account Boundary**: All actions are strictly bounded to the user-authorized Binance Agentic Sub-Account. No external withdrawals.
+2. **Pre-Trade Risk Verification**: Every non-read action must adhere to pre-configured max notional boundaries.
+3. **Derivatives Safety**: Never exceed 5x leverage on any futures contract.
+4. **Emergency Stop**: If triggered, purge open orders across spot, margin, and futures simultaneously.
