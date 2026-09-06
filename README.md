@@ -30,7 +30,7 @@ Operating inside **isolated Binance Agentic Sub-Accounts**, Sentinel-OS blends m
 
 > Want to run this yourself? → **[SETUP.md](./SETUP.md)** — Clone, install skills, connect Binance MCP, and run in under 10 minutes.
 > 
-> Want to see it in action? → **[DEMO_WALKTHROUGH.md](./DEMO_WALKTHROUGH.md)** — Exact prompt-by-prompt script matching the video demo.
+> Want to see real agent outputs? → **[EXAMPLES.md](./EXAMPLES.md)** — Real interaction examples across all 6 capability areas.
 
 ---
 
