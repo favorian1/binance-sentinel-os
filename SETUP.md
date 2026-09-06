@@ -1,109 +1,150 @@
-# Setup Guide — How to Run Binance Sentinel-OS on Antigravity
+# 🚀 Setup Guide — Run Binance Sentinel-OS in Under 10 Minutes
 
-This guide shows you how to install and run the Binance Sentinel-OS agent on your own machine in under 10 minutes.
+Follow these steps exactly. Each step has a confirmation check so you know it worked before moving to the next.
 
 ---
 
-## Prerequisites
+## What You Need Before Starting
 
 | Requirement | Where to Get It |
 | :--- | :--- |
-| **Google Antigravity (AGY)** CLI installed | [antigravity.dev](https://antigravity.dev) |
-| **Binance Account** with Agent OS access | [binance.com/agent-os](https://www.binance.com/agent-os) |
-| **Binance Agentic Sub-Account** funded | [Transfer funds here](https://www.binance.com/en/my/sub-account/asset-management/transfer) |
+| **Google Antigravity (AGY) CLI** | Download at [antigravity.dev](https://antigravity.dev) |
+| **Binance Account** with Agent OS enabled | Enable at [binance.com/agent-os](https://www.binance.com/agent-os) |
+| **Binance Agentic Sub-Account** | Create one at [Binance Sub-Accounts](https://www.binance.com/en/my/sub-account/management) |
+| **Funded Sub-Account** (any amount of USDT) | Transfer at [binance.com Sub-Account Transfer](https://www.binance.com/en/my/sub-account/asset-management/transfer) |
 
 ---
 
-## Step 1: Clone the Repository
+## ✅ Step 1 — Clone the Repository
+
+Open your terminal and run:
 
 ```bash
 git clone https://github.com/favorian1/binance-sentinel-os.git
 cd binance-sentinel-os
 ```
 
+**How to confirm it worked:**
+```bash
+ls
+```
+You should see: `README.md`, `SETUP.md`, `DEMO_WALKTHROUGH.md`, `.agents/`
+
 ---
 
-## Step 2: Install the Binance Sentinel Skills into Antigravity
-
-Copy the agent skill suite into your Antigravity skills directory:
+## ✅ Step 2 — Install the 5 Binance Sentinel Skills into Antigravity
 
 ```bash
 cp -r .agents/skills/* ~/.agents/skills/
 ```
 
-This installs all 5 specialized skills into AGY:
-- `binance-sentinel` — Master operating mandate
-- `binance-market-intelligence` — Technical analysis across all products
-- `binance-risk-guardrails` — Pre-trade safety engine
-- `binance-portfolio-rebalancer` — Balance audit & DCA planning
-- `binance-derivatives-engine` — Futures, Margin & Convert execution
+**How to confirm it worked:**
+```bash
+ls ~/.agents/skills/ | grep binance
+```
+You should see all 5 skills listed:
+```
+binance-derivatives-engine
+binance-market-intelligence
+binance-portfolio-rebalancer
+binance-risk-guardrails
+binance-sentinel
+```
 
 ---
 
-## Step 3: Connect Binance Agent OS MCP to Antigravity
+## ✅ Step 3 — Authenticate Binance Agent OS MCP
 
-In your terminal, authenticate the Binance Agent OS MCP server:
+Make sure you are **logged into your Binance account** in your browser first, then run:
 
 ```bash
 agy mcp auth binance-agent-os
 ```
 
-This opens a browser window to authorize your Binance account via OAuth. Log in and approve the Agentic Sub-Account scope.
+**What happens:**
+1. A browser window or authorization URL opens.
+2. Log in with the Binance account that has an Agentic Sub-Account.
+3. Approve the **Agentic Sub-Account** scope when prompted.
+4. You will see a success confirmation in the terminal.
 
-> ⚠️ **Important**: Use an isolated Binance Sub-Account, not your main account.
-> Fund it at [binance.com/en/my/sub-account/asset-management/transfer](https://www.binance.com/en/my/sub-account/asset-management/transfer).
+> ⚠️ **Use an isolated Binance Sub-Account — never your main account.**
+> The agent has NO withdrawal permissions by design.
 
 ---
 
-## Step 4: Verify Connection
+## ✅ Step 4 — Open Antigravity and Verify the Connection
 
-Open Antigravity and test the connection with a simple prompt:
+Open AGY in your terminal:
+
+```bash
+agy
+```
+
+Then type this prompt to verify the MCP is live:
 
 ```
-Sentinel: Fetch real-time price for BNBUSDT.
+Sentinel: Get the current price of BNBUSDT.
 ```
 
-AGY should respond by calling `spot.tickerPrice` via the Binance Agent OS MCP and return the live price.
+**What to expect:**
+AGY calls `spot.tickerPrice` via Binance Agent OS and returns the live BNB price — something like:
+```
+BNB/USDT: $594.30
+```
+
+If you see a real price — **the agent is live and connected!** 🎉
 
 ---
 
-## Step 5: Run the Full Demo
+## ✅ Step 5 — Check Your Sub-Account Balance
 
-Follow the step-by-step prompt guide in [`DEMO_WALKTHROUGH.md`](./DEMO_WALKTHROUGH.md) to experience the full agent capabilities:
+```
+Sentinel: Check my sub-account balance and show available funds.
+```
 
-- Market intelligence across Spot & Futures
-- Sub-account balance audit
-- Risk guardrail interception
-- Derivatives position setup (3x leverage, ISOLATED)
-- Zero-slippage Convert
-- Emergency stop across all products
+**What to expect:**
+AGY calls `spot.getAccount` and returns your sub-account assets and free USDT balance.
 
 ---
 
-## How It Works (For Judges)
+## ✅ Step 6 — Run the Full Demo
+
+Follow the complete prompt-by-prompt script in **[DEMO_WALKTHROUGH.md](./DEMO_WALKTHROUGH.md)** to experience:
+
+- 📊 Market intelligence across Spot, Futures & funding rates
+- 🛡️ Risk guardrail interception (watch AGY reject a 20x leverage request)
+- 📈 Derivatives setup (3x isolated leverage on BNB futures)
+- 🔄 Zero-slippage Convert (USDT → BNB instantly)
+- 🚨 Emergency stop across Spot, Futures & Margin simultaneously
+
+---
+
+## How It Works Under The Hood
 
 ```
 You type a prompt in AGY
-        ↓
-AGY reads the Binance Sentinel skill rules
-        ↓
-AGY decides which Binance MCP tool to call
-        ↓
-Binance Agent OS MCP executes against your sub-account
-        ↓
-AGY synthesizes the result and responds
+         ↓
+AGY reads the Binance Sentinel skill rules (from .agents/skills/)
+         ↓
+AGY reasons about which Binance tool to call and in what order
+         ↓
+Binance Agent OS MCP executes the tool against your sub-account
+         ↓
+AGY synthesizes the result and responds in plain language
 ```
 
-No external servers. No API keys in code. No bots running in the background.
-**The agent IS Antigravity, guided by the skills in this repository.**
+> No external servers. No API keys in code. No bots running in the background.
+> **The agent IS Antigravity, guided by the skill files in this repository.**
 
 ---
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
-| Issue | Solution |
+| Problem | Fix |
 | :--- | :--- |
-| `Unauthorized` error on MCP | Re-run `agy mcp auth binance-agent-os` |
-| Sub-account balance is 0 | Transfer funds via Binance sub-account management |
-| Tool returns permission error | Enable Spot/Futures Trading permissions on your Binance API key |
-| Rate limit error (-1003) | Wait 30–60 seconds before retrying |
+| `Unauthorized` on first tool call | Re-run `agy mcp auth binance-agent-os` and re-approve |
+| Browser does not open during auth | Copy the URL from the terminal and open it manually |
+| Sub-account balance shows 0 | Transfer funds at [Sub-Account Transfer](https://www.binance.com/en/my/sub-account/asset-management/transfer) |
+| `Permission denied` on a tool | Enable Spot/Futures/Margin Trading on your Binance API key settings |
+| Rate limit error code `-1003` | Wait 30–60 seconds and retry the prompt |
+| Skills not appearing in AGY | Restart AGY after copying the skill files |
