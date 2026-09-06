@@ -2,7 +2,7 @@
 
 # ⚡ Binance Sentinel-OS
 
-### Autonomous Full-Stack AI Trading & Intelligence Agent — Native to Google Antigravity (AGY)
+### Autonomous Full-Stack AI Trading, Risk & Intelligence Agent — Native to Google Antigravity (AGY)
 
 [![Binance Agent OS](https://img.shields.io/badge/Binance-Agent%20OS%20MCP-F0B90B?style=for-the-badge&logo=binance&logoColor=black)](https://developers.binance.com/en/docs/agent-native/mcp-server)
 [![Antigravity](https://img.shields.io/badge/Antigravity-Agentic%20Runtime-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://antigravity.dev)
@@ -20,17 +20,17 @@
 
 Traditional algorithmic trading bots are brittle, require constant maintenance, and are dangerously unconstrained. Standalone AI models hallucinate and lack real-time connection to financial settlement layers.
 
-**Binance Sentinel-OS** bridges both worlds by turning **Google Antigravity (AGY)** — a state-of-the-art agentic AI runtime — into a multi-product, self-supervising financial co-pilot directly integrated with the official **Binance Agent OS Model Context Protocol (MCP)** endpoint.
+**Binance Sentinel-OS** bridges both worlds by turning **Google Antigravity (AGY)** — a state-of-the-art agentic AI runtime — into a comprehensive, self-supervising financial co-pilot directly integrated with the official **Binance Agent OS Model Context Protocol (MCP)** endpoint.
 
-Operating inside **isolated Binance Agentic Sub-Accounts**, Sentinel-OS blends multi-turn conversational reasoning with a modular skill suite covering **Spot, USDⓈ-M Futures, COIN-M Futures, Margin Trading, Binance Convert, and Wallet** — all governed by deterministic pre-trade risk guardrails and a one-command emergency killswitch.
+Operating strictly inside **isolated Binance Agentic Sub-Accounts**, Sentinel-OS blends multi-turn conversational reasoning with a **9-skill modular intelligence suite** covering **Spot, USDⓈ-M Futures, COIN-M Futures, Margin Trading, Binance Convert, Automated P&L Attribution, Liquidation Defense, Alpha Discovery, and Treasury Management** — all governed by deterministic pre-trade risk guardrails and a one-command emergency killswitch.
 
 ---
 
-## ⚡ Quick Start for Judges
+## ⚡ Quick Start for Judges & Developers
 
-> Want to run this yourself? → **[SETUP.md](./SETUP.md)** — Clone, install skills, connect Binance MCP, and run in under 10 minutes.
+> 🚀 **Want to run this yourself?** → **[SETUP.md](./SETUP.md)** — Step-by-step from zero (Binance sub-account setup, AI client installation for AGY/Claude Code/Cursor, MCP authentication, and live verification in under 15 minutes).
 > 
-> Want to see real agent outputs? → **[EXAMPLES.md](./EXAMPLES.md)** — Real interaction examples across all 6 capability areas.
+> 🎯 **Want to see real agent outputs?** → **[EXAMPLES.md](./EXAMPLES.md)** — Clean production interaction logs across all capability areas.
 
 ---
 
@@ -39,116 +39,73 @@ Operating inside **isolated Binance Agentic Sub-Accounts**, Sentinel-OS blends m
 ```mermaid
 flowchart TB
     subgraph AGY ["🧠 Google Antigravity — Native Agentic Runtime"]
-        User(["👤 User / Autonomous Goal Trigger"]) --> Planner["Multi-Turn Reasoning & Planning Core"]
-        Planner --> Dispatch["Skill Dispatch Router"]
+        User(["👤 User / Autonomous Schedule Trigger"]) --> Planner["Multi-Turn Reasoning Core"]
+        Planner --> Dispatch["Specialized Skill Dispatch Router"]
 
-        subgraph Skills ["⚡ Specialized Agent Skill Suite"]
-            S1["🔍 binance-market-intelligence\nSpot, Futures, Margin, Funding Rate"]
-            S2["🛡️ binance-risk-guardrails\nPer-trade Caps, Leverage Limits, Health Floors"]
-            S3["⚖️ binance-portfolio-rebalancer\nBalance Audit, DCA, Convert Routing"]
-            S4["📈 binance-derivatives-engine\nFutures Leverage, Position Risk, Convert"]
-            S5["🎯 binance-sentinel\nMaster Mandate & Emergency Stop"]
+        subgraph CoreSkills ["⚡ 9-Skill Modular Intelligence Suite"]
+            S1["🔍 market-intelligence\nSpot, Futures & Funding"]
+            S2["🛡️ risk-guardrails\nPre-Trade Mathematical Caps"]
+            S3["⚖️ portfolio-rebalancer\nAsset Audit & DCA"]
+            S4["📈 derivatives-engine\nFutures Leverage & Convert"]
+            S5["📊 pnl-tracker\nRealized P&L & Drawdowns"]
+            S6["🛡️ liquidation-guardian\nDistance Proximity & Deleverage"]
+            S7["🎯 alpha-intelligence\nAI Token Reports & Momentum"]
+            S8["💰 fund-allocator\nSub-Account Treasury Moves"]
+            S9["👑 sentinel-master\nExecutive Mandate & Purge"]
         end
 
-        Dispatch --> S1 & S2 & S3 & S4 & S5
+        Dispatch --> CoreSkills
     end
 
-    subgraph MCP ["⚡ Binance Agent OS (82+ MCP Tools)"]
+    subgraph MCP ["⚡ Binance Agent OS (82+ Official MCP Tools)"]
         Transport["SSE Stream Transport\nhttps://agent.binance.com/mcp/agentic"]
-        Transport --> T1["Spot & Tokenized Stocks\nspot.tickerPrice · spot.klines · spot.newOrder"]
-        Transport --> T2["USDⓈ-M Futures (16 tools)\nfutures_usds.newOrder · positionInfoV2 · markPriceKlines"]
-        Transport --> T3["COIN-M Futures (16 tools)\nfutures_coin.newOrder · indexPriceKlines"]
-        Transport --> T4["Margin Trading (13 tools)\nmarginAccountNewOrder · collateralRatio · borrowRepay"]
-        Transport --> T5["Binance Convert (9 tools)\nsendQuoteRequest · acceptQuote · placeLimitOrder"]
-        Transport --> T6["Wallet & Sub-Account (11 tools)\nqueryUserWalletBalance · userUniversalTransfer"]
-        Transport --> T7["AI Token Analysis\nanalysis.getTokenAiReport"]
+        Transport --> T1["Spot Trading (13 tools)\nspot.tickerPrice · spot.klines · spot.myTrades"]
+        Transport --> T2["USDⓈ-M Futures (16 tools)\nnewOrder · positionInformationV2 · markPrice"]
+        Transport --> T3["COIN-M Futures (16 tools)\npositionInformation · changeInitialLeverage"]
+        Transport --> T4["Margin Trading (13 tools)\ncrossMarginCollateralRatio · borrowRepay"]
+        Transport --> T5["Binance Convert (9 tools)\nsendQuoteRequest · acceptQuote"]
+        Transport --> T6["Wallet & Sub-Account (11 tools)\ngetMainAccountAsset · userUniversalTransfer"]
+        Transport --> T7["AI Token Reports (1 tool)\nanalysis.getTokenAiReport"]
     end
 
     subgraph Binance ["🏦 Binance Exchange Infrastructure"]
-        SubAccount["🔒 Isolated Agentic Sub-Account"]
-        Engine["📊 Global Spot, Margin & Derivatives Liquidity"]
+        SubAccount["🔒 Isolated Agentic Sub-Account\n(Funded by User, Zero Withdrawal Scope)"]
+        OrderBooks["📊 Global Spot, Margin & Derivatives Liquidity"]
     end
 
-    S5 -->|Pre-Trade Safety Filter| Transport
-    T1 & T2 & T3 & T4 & T5 & T6 & T7 <--> SubAccount & Engine
+    S9 -->|Pre-Trade Safety Filter| Transport
+    T1 & T2 & T3 & T4 & T5 & T6 & T7 <--> SubAccount & OrderBooks
 ```
 
 ---
 
-## 🌟 Five-Skill Modular Intelligence Suite
+## 🌟 9-Skill Modular Intelligence Suite
 
-| Skill | Role | MCP Tools Covered |
+| Skill | Category | Capabilities & Integrated MCP Tools |
 | :--- | :--- | :--- |
-| **[`binance-sentinel`](./.agents/skills/binance-sentinel/SKILL.md)** | Master mandate, cross-product orchestration & emergency purge | All 82+ tools |
-| **[`binance-market-intelligence`](./.agents/skills/binance-market-intelligence/SKILL.md)** | Technical analysis: Spot klines, Futures mark price, funding rate, orderbook depth, RSI/EMA, AI reports | `spot.klines` · `futures_usds.markPriceKlineCandlestickData` · `futures_usds.premiumIndexKlineData` · `spot.depth` · `analysis.getTokenAiReport` |
-| **[`binance-risk-guardrails`](./.agents/skills/binance-risk-guardrails/SKILL.md)** | Pre-trade safety: Per-trade cap, daily limit, leverage ceiling (max 5x), margin health floor, emergency multi-product purge | `spot.deleteOpenOrders` · `futures_usds.cancelOrder` · `margin.marginAccountCancelAllOpenOrdersOnASymbol` |
-| **[`binance-portfolio-rebalancer`](./.agents/skills/binance-portfolio-rebalancer/SKILL.md)** | Asset audit, drift analysis & DCA conversion planning | `spot.getAccount` · `wallet.queryUserWalletBalance` · `convert.sendQuoteRequest` · `convert.acceptQuote` |
-| **[`binance-derivatives-engine`](./.agents/skills/binance-derivatives-engine/SKILL.md)** | Futures leverage setup, position & liquidation risk, COIN-M & USDⓈ-M, margin borrowing, zero-slippage Convert | `futures_usds.changeInitialLeverage` · `futures_usds.positionInformationV2` · `futures_coin.newOrder` · `margin.marginAccountBorrowRepay` |
+| **`binance-sentinel`** | Master Mandate | Executive command orchestrator, sub-account boundary enforcement, emergency purge across all markets. |
+| **`binance-market-intelligence`** | Analysis | Spot klines, Futures mark price, funding rates (`futures_usds.premiumIndexKlineData`), orderbook depth (`spot.depth`), and EMA/RSI momentum. |
+| **`binance-risk-guardrails`** | Safety | Pre-trade deterministic compliance: $50 trade cap, $250 24h spend limit, 5x leverage ceiling, ISOLATED margin floor. |
+| **`binance-portfolio-rebalancer`** | Optimization | Balance audits (`spot.getAccount`), portfolio weight divergence tracking, and planned DCA allocation. |
+| **`binance-derivatives-engine`** | Execution | USDⓈ-M & COIN-M Futures leverage configuration, position entries, cross/isolated margin, and zero-slippage Convert. |
+| **`binance-pnl-tracker`** | Attribution | Realized/unrealized P&L accounting via `spot.myTrades`, 30-day equity snapshots (`wallet.dailyAccountSnapshot`), and win-rate analysis. |
+| **`binance-liquidation-guardian`** | Risk Shield | Real-time liquidation distance calculations via `futures_usds.positionInformationV2`, automated deleverage triggers (< 15% distance). |
+| **`binance-alpha-intelligence`** | Discovery | Momentum screener using `spot.ticker24hr`, orderbook imbalance walls, and Binance AI token sentiment via `analysis.getTokenAiReport`. |
+| **`binance-fund-allocator`** | Treasury | Sub-account working capital right-sizing, internal transfers via `wallet.userUniversalTransfer`, and main account asset auditing. |
 
 ---
 
-## 🛡️ Security & Risk Model
+## 🛡️ Security & Sub-Account Isolation Model
 
-| Layer | Rule |
-| :--- | :--- |
-| **Sub-Account Isolation** | Agent operates exclusively inside an isolated Binance Agentic Sub-Account. No external withdrawals ever invoked. |
-| **Spot Trade Cap** | Maximum $50.00 USDT notional per spot order. Max $250.00 USDT in any 24-hour window. |
-| **Futures Leverage Cap** | Hard ceiling of 5x on any USDⓈ-M or COIN-M contract. ISOLATED margin mode enforced. |
-| **Margin Health Floor** | Cross-margin collateral ratio must be ≥ 2.0 before any borrow or margin order. |
-| **Emergency Circuit Breaker** | One-command simultaneous cancellation of ALL open orders across spot, futures, and margin. |
-| **Zero Credential Storage** | Authentication uses Binance Agent OS secure OAuth session transport. No API keys committed. |
-
----
-
-## 🚀 Live Demo Examples (AGY Native Prompts)
-
-### Market Intelligence Across Products
-```
-User: "Sentinel: Analyze BNB and compare spot vs futures mark price. Check funding rate."
-Agent:
-  → [spot.ticker24hr]          BNB Spot: $594.30 (+2.1% 24h)
-  → [futures_usds.symbolPriceTicker]  BNB Perp Mark: $594.80 (+$0.50 premium)
-  → [futures_usds.premiumIndexKlineData] Funding rate: +0.01% (neutral/mildly bullish)
-  → Analysis: "BNB futures trading at slight premium to spot. Funding neutral.
-               EMA-9 above EMA-21. RSI-14: 52 (neutral). No strong entry signal yet."
-```
-
-### Derivatives Position Setup with Guardrails
-```
-User: "Sentinel: Open a 3x long BNB futures position."
-Agent:
-  → [futures_usds.changeMarginType]      Set ISOLATED margin ✓
-  → [futures_usds.changeInitialLeverage] Set 3x (within 5x cap) ✓
-  → [futures_usds.positionInformationV2] Verify no existing conflicting position ✓
-  → [futures_usds.newOrder]              Limit long order placed ✓
-```
-
-### Guardrail Interception
-```
-User: "Sentinel: Go 20x on BTC futures."
-Agent:
-  → Risk Guardrail REJECTED:
-    "Leverage 20x exceeds the hard cap of 5x. Execution halted.
-     Recommend maximum 5x ISOLATED if you want to proceed."
-```
-
-### Zero-Slippage Convert
-```
-User: "Sentinel: Convert 50 USDT to BNB instantly."
-Agent:
-  → [convert.sendQuoteRequest]  Quote: 50 USDT → 0.0841 BNB (valid 15s)
-  → [convert.acceptQuote]       Conversion settled ✓ No orderbook slippage.
-```
-
-### Emergency Stop — All Products
-```
-User: "Sentinel: /stop — cancel everything."
-Agent:
-  → [spot.deleteOpenOrders]                              Spot orders cleared ✓
-  → [futures_usds.currentAllOpenOrders] → cancelOrder    Futures orders cleared ✓
-  → [margin.marginAccountCancelAllOpenOrdersOnASymbol]   Margin orders cleared ✓
-  → "All open orders across Spot, Futures, and Margin have been cancelled."
-```
+1. **Sub-Account Boundary**: Sentinel-OS runs exclusively inside an isolated Binance Agentic Sub-Account. The agent has **no withdrawal or external transfer permissions**, eliminating fund drainage risk.
+2. **Deterministic Pre-Trade Caps**:
+   - Max single trade notional: **$50.00 USDT** (configurable).
+   - 24-hour aggregate spend cap: **$250.00 USDT**.
+   - Restricted trading universe: `BNBUSDT`, `BTCUSDT`, `ETHUSDT`, `SOLUSDT`.
+   - Max futures leverage: **5x ISOLATED**.
+3. **Liquidation Defense Shield**: Positions nearing liquidation price (< 15% buffer) trigger automated reduce-only orders.
+4. **Emergency Circuit Breaker**: Immediate simultaneous cancellation of all open orders across spot, futures, and margin via `spot.deleteOpenOrders`.
+5. **Zero Credential Leaks**: Uses Binance Agent OS secure session transport. No API keys or tokens are stored in code or git.
 
 ---
 
@@ -158,31 +115,32 @@ Agent:
 binance-agent-os-agy/
 ├── .agents/
 │   └── skills/
-│       ├── binance-sentinel/               # Master multi-product mandate
-│       ├── binance-market-intelligence/    # Spot, Futures & Margin technical analysis
-│       ├── binance-risk-guardrails/        # Pre-trade safety across all products
-│       ├── binance-portfolio-rebalancer/   # Balance audit & DCA planning
-│       └── binance-derivatives-engine/     # Futures, Margin & Convert execution
-├── AGENTS.md                               # AGY operating rules & invariants
-├── DEMO_WALKTHROUGH.md                     # Video demo script for hackathon judges
-├── LICENSE                                 # MIT License
-├── .gitignore                              # Zero credential leak policy
-└── README.md                               # This document
+│       ├── binance-sentinel/              # Master Multi-Product Mandate
+│       ├── binance-market-intelligence/   # Technical & Microstructure Analysis
+│       ├── binance-risk-guardrails/       # Pre-trade Capital Protection Engine
+│       ├── binance-portfolio-rebalancer/  # Sub-Account Balance & DCA Allocator
+│       ├── binance-derivatives-engine/    # Futures, Margin & Convert Execution
+│       ├── binance-pnl-tracker/           # Historical Trade Attribution & ROI
+│       ├── binance-liquidation-guardian/  # Dynamic Liquidation Shield & Deleverage
+│       ├── binance-alpha-intelligence/    # 24h Momentum Scanner & AI Reports
+│       └── binance-fund-allocator/        # Sub-Account Treasury Management
+├── AGENTS.md                              # AGY Operating Rules & Invariants
+├── SETUP.md                               # Zero-to-Live Guide (AGY / Claude / Cursor)
+├── EXAMPLES.md                            # Production Interaction Logs
+├── LICENSE                                # MIT License
+├── .gitignore                             # Zero credential leak policy
+└── README.md                              # Project Documentation
 ```
 
 ---
 
 ## 🏆 Hackathon Compliance (Track A)
 
-| Requirement | Status |
-| :--- | :--- |
-| **Track** | Track A — Build an AI Agent using Binance Agent OS |
-| **Agent Framework** | Google Antigravity (AGY) — Native Agentic Runtime |
-| **MCP Protocol** | Official Binance Agent OS endpoint (`https://agent.binance.com/mcp/agentic`) |
-| **Products Covered** | Spot, USDⓈ-M Futures, COIN-M Futures, Margin, Convert, Wallet |
-| **Risk Controls** | Deterministic pre-trade guardrails across all products |
-| **GitHub Repository** | ✅ Public repository with full documentation |
-| **Video Demo** | ✅ Full demo script in [`DEMO_WALKTHROUGH.md`](./DEMO_WALKTHROUGH.md) |
+- **Track**: Track A — Build an AI Agent using Binance Agent OS ($20,000 USDC Pool)
+- **Agent Framework**: Google Antigravity (AGY) + compatible with Claude Code and Cursor
+- **Protocol**: Model Context Protocol (MCP) connecting to `https://agent.binance.com/mcp/agentic`
+- **Official Tools Utilized**: 82 tools across `spot`, `futures_usds`, `futures_coin`, `margin`, `convert`, `wallet`, `sub_account`, `analysis`
+- **Submission Requirements**: GitHub Repository + Video Demo + X Post
 
 ---
 
