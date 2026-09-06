@@ -26,6 +26,14 @@ Operating inside **isolated Binance Agentic Sub-Accounts**, Sentinel-OS blends m
 
 ---
 
+## ⚡ Quick Start for Judges
+
+> Want to run this yourself? → **[SETUP.md](./SETUP.md)** — Clone, install skills, connect Binance MCP, and run in under 10 minutes.
+> 
+> Want to see it in action? → **[DEMO_WALKTHROUGH.md](./DEMO_WALKTHROUGH.md)** — Exact prompt-by-prompt script matching the video demo.
+
+---
+
 ## 🏛️ Full-Stack Architecture
 
 ```mermaid
