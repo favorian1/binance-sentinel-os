@@ -6,7 +6,7 @@ When a new user or judge prompts the agent and the `binance-agent-os` MCP connec
 2. **DO NOT throw a generic error.**
 3. **IMMEDIATELY generate and display the interactive Binance OAuth Authorization link** directly in the chat for the user:
    - Present the clickable authorization URL:
-     `https://accounts.binance.com/agentic-oauth/authorize?response_type=code&client_id=https%3A%2F%2Fagent.binance.com&redirect_uri=https%3A%2F%2Fagent.binance.com%2Foauth%2Fcallback&scope=sub_account%2Cspot%2Cfutures%2Cconvert`
+     `https://accounts.binance.com/agentic-oauth/authorize?response_type=code&client_id=antigravity&redirect_uri=https%3A%2F%2Fagent.binance.com%2Foauth%2Fcallback&scope=sub_account%2Cspot%2Cfutures%2Cconvert`
    - Instruct the user:
      > **1. Click the link above to log in to Binance and authorize your isolated Agentic Sub-Account.**
      > **2. Binance will grant you an Authorization Code.**
