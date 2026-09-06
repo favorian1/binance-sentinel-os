@@ -170,3 +170,32 @@ Your $15 USDT margin easily satisfies lower-minimum liquid perpetual pairs:
 
 Would you like me to execute a 3x long on **SOLUSDT** instead? [yes/no]
 ```
+
+---
+
+## 8. Delta-Neutral Funding Rate Arbitrage (Cash & Carry)
+
+**Prompt:**
+```
+Sentinel: Scan for high funding rates and propose a delta-neutral cash-and-carry position.
+```
+
+**Agent Response:**
+```
+🌾 Delta-Neutral Funding Rate Scan
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Scanning `futures_usds.premiumIndexKlineData` across active perpetuals...
+
+Top Opportunity:
+  • Symbol: PEPEUSDT Perp
+  • 8h Funding Rate: +0.048% (~52.5% Annualized APR)
+  • Next Settlement: In 2 hours 14 mins
+
+Strategy Execution Plan (Zero Directional Risk):
+  1. Buy $50.00 PEPE on Spot (`spot.newOrder`)
+  2. Open $50.00 1x Short on PEPEUSDT Perp (`futures_usds.newOrder`)
+  3. Net Delta: 0.00 (Price changes cancel out perfectly)
+  4. Estimated Yield: ~$0.072 USDT every 8 hours ($0.216/day) passive yield.
+
+Confirm Delta-Neutral Execution? [yes/no]
+```

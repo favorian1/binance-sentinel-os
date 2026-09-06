@@ -1,0 +1,43 @@
+{
+  "strategies": [
+    {
+      "name": "Delta-Neutral Cash & Carry Arbitrage",
+      "edge": "Exploits positive funding rate differentials on USDⓈ-M Perps without taking directional price risk.",
+      "execution": [
+        "1. Query futures_usds.premiumIndexKlineData to find high positive funding pairs (> 0.03% per 8h, > 32% annualized).",
+        "2. Buy 1x Spot equivalent via spot.newOrder.",
+        "3. Simultaneously open 1x Short USDⓈ-M Perpetual via futures_usds.newOrder.",
+        "4. Net delta = 0 (immune to market dumps or pumps). Collects funding payments every 8 hours directly into sub-account."
+      ]
+    },
+    {
+      "name": "Mean-Reversion Bollinger Breakout DCA",
+      "edge": "Captures sharp liquidity wicks and oversold flash crashes on high-volume pairs.",
+      "execution": [
+        "1. Calculate 20-period SMA and +/- 2 standard deviation Bollinger Bands on 1h klines via spot.klines.",
+        "2. When price pierces Lower Band and RSI-14 < 28: trigger entry tranche 1.",
+        "3. Place limit take-profit ladder at the 20-period SMA middle band.",
+        "4. Enforce trailing stop-loss at 2.5% below entry."
+      ]
+    },
+    {
+      "name": "Cross-DEX / CeFi Basis Spread Arbitrage",
+      "edge": "Monitors basis premium between Spot and Quarterly Delivery contracts.",
+      "execution": [
+        "1. Compare spot.tickerPrice with futures_usds quarterly contract (e.g. BTCUSDT vs BTCUSDT_260925).",
+        "2. When basis spread expands > 4% annualized above risk-free rate: Long spot, Short quarterly contract.",
+        "3. Locks in fixed convergence profit on settlement date with zero liquidation risk."
+      ]
+    },
+    {
+      "name": "Liquidity Absorption Orderbook Imbalance Hunter",
+      "edge": "Front-runs institutional accumulation walls before price breakouts.",
+      "execution": [
+        "1. Fetch spot.depth (limit: 50) and compute bid-to-ask depth imbalance ratio.",
+        "2. If bid depth / ask depth > 2.2 within 1% of mid-market: institutional absorption detected.",
+        "3. Cross-reference with analysis.getTokenAiReport for sentiment verification.",
+        "4. Enter early with tight stop placed immediately behind the bid liquidity wall."
+      ]
+    }
+  ]
+}
