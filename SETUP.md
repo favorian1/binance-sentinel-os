@@ -16,7 +16,7 @@ Binance Account  +  AI Client (AGY / Claude Code / Cursor)  +  This Repo
 You need **three things**:
 1. A Binance account with an isolated sub-account (where your funds live safely)
 2. An AI client installed on your computer (pick one: AGY, Claude Code, or Cursor)
-3. This repository cloned to your machine (the skills and rules that make the AI a Binance agent)
+3. This repository cloned to your machine (the 9-skill suite and rules)
 
 ---
 
@@ -71,11 +71,9 @@ You should see a version number printed. ✅
 
 **Step 2B.1 — Create an Anthropic account**
 
-Go to [claude.ai](https://claude.ai) and sign up for a free account.
+Go to [claude.ai](https://claude.ai) and sign up for an account.
 
 **Step 2B.2 — Install Claude Code**
-
-Follow the installation guide at [docs.anthropic.com/claude-code](https://docs.anthropic.com/en/docs/claude-code).
 
 ```bash
 # macOS / Linux
@@ -122,7 +120,7 @@ Confirm it worked:
 ```bash
 ls
 ```
-You should see: `README.md`, `SETUP.md`, `DEMO_WALKTHROUGH.md`, `.agents/`  ✅
+You should see: `README.md`, `SETUP.md`, `EXAMPLES.md`, `AGENTS.md`, `.agents/`  ✅
 
 ---
 
@@ -135,7 +133,7 @@ You should see: `README.md`, `SETUP.md`, `DEMO_WALKTHROUGH.md`, `.agents/`  ✅
 
 ### If you chose AGY:
 
-**Step 4A.1 — Install the Binance Sentinel skills**
+**Step 4A.1 — Install the 9 Binance Sentinel skills**
 ```bash
 cp -r .agents/skills/* ~/.agents/skills/
 ```
@@ -144,13 +142,32 @@ Confirm:
 ```bash
 ls ~/.agents/skills/ | grep binance
 ```
-Should list all 5 `binance-*` skills. ✅
+Should list all 9 `binance-*` skills. ✅
 
-**Step 4A.2 — Authenticate Binance Agent OS**
+**Step 4A.2 — Register the Binance Agent OS MCP Server in AGY**
 ```bash
-agy mcp auth binance-agent-os
+agy mcp add --transport http binance-agent-os https://agent.binance.com/mcp/agentic
 ```
-A browser window opens → log into your Binance account → approve the Agent OS scope for your sub-account. ✅
+
+Confirm it is registered:
+```bash
+agy mcp list
+```
+You should see `binance-agent-os` listed as `enabled`. ✅
+
+**Step 4A.3 — Authenticate with Binance**
+
+Open AGY:
+```bash
+agy
+```
+Ask AGY any Binance question (e.g. *"Sentinel: Check my balance"*).
+On the very first tool call, AGY will automatically open a browser window:
+1. Log in with your Binance account.
+2. Select your isolated **Agentic Sub-Account**.
+3. Click **Approve**.
+
+The session token is securely saved by AGY. You are now live! ✅
 
 ---
 
@@ -182,7 +199,7 @@ Paste this into the file:
 ```bash
 claude
 ```
-Claude Code will prompt you to authorize Binance → log in → approve. ✅
+Claude Code will prompt you to authorize Binance in your browser → log in → approve. ✅
 
 **Step 4B.4 — Load the Sentinel rules**
 
@@ -234,15 +251,15 @@ If both appear — **your Binance AI agent is fully live!** 🎉
 
 ---
 
-## PART 6 — Run the Full Demo
+## PART 6 — Explore Agent Capabilities
 
-Follow the complete prompt-by-prompt script in **[DEMO_WALKTHROUGH.md](./DEMO_WALKTHROUGH.md)** to see:
+Check out **[EXAMPLES.md](./EXAMPLES.md)** for sample prompts and outputs:
 
-- 📊 Market analysis across Spot, Futures & funding rates
-- 🛡️ Risk guardrail blocking an oversized trade
-- 📈 Safe derivatives position with 3x leverage
-- 🔄 Zero-slippage token conversion
-- 🚨 Emergency stop cancelling all open orders instantly
+- 📊 Multi-market technical analysis (Spot, Futures, and funding rates)
+- 🔄 Smart micro-trade routing (< $5 USDT auto-routes to Binance Convert)
+- 🛡️ Dynamic exchange filter validation (LOT_SIZE, stepSize, minNotional)
+- 📈 Safe derivatives position with isolated leverage
+- 🚨 Emergency stop cancelling all open orders across products instantly
 
 ---
 
@@ -250,11 +267,10 @@ Follow the complete prompt-by-prompt script in **[DEMO_WALKTHROUGH.md](./DEMO_WA
 
 | Problem | Fix |
 | :--- | :--- |
-| `agy: command not found` | Re-install AGY from [antigravity.dev](https://antigravity.dev) |
-| `claude: command not found` | Run `npm install -g @anthropic-ai/claude-code` again |
-| `Unauthorized` when calling a tool | Re-run auth: `agy mcp auth binance-agent-os` |
-| Browser does not open during auth | Copy the URL from terminal and open it manually in your browser |
-| Sub-account balance shows 0 | Transfer USDT at [Binance Sub-Account Transfer](https://www.binance.com/en/my/sub-account/asset-management/transfer) |
-| Permission error on Futures/Margin tools | Enable Futures & Margin Trading permissions in Binance API settings |
+| `agy: command not found` | Install AGY from [antigravity.dev](https://antigravity.dev) |
+| `claude: command not found` | Run `npm install -g @anthropic-ai/claude-code` |
+| `binance-agent-os` not in `agy mcp list` | Run `agy mcp add --transport http binance-agent-os https://agent.binance.com/mcp/agentic` |
+| Browser does not open during auth | Copy the auth URL from terminal and open manually in browser |
+| Sub-account balance shows 0 | Transfer USDT at [Binance Sub-Account Transfer](https://www.binance.com/en/my/sub-account/asset-management/transfer?asset=USDT) |
 | Rate limit error `-1003` | Wait 30–60 seconds and retry the prompt |
 | Skills not appearing in AGY | Restart AGY after running the `cp -r` command |
