@@ -1,51 +1,55 @@
 ---
 name: binance-risk-guardrails
-description: "Exchange-native mathematical guardrail engine for Binance Agent OS. Dynamically queries Binance exchangeInfo filter rules (minNotional, maxNotional, LOT_SIZE, stepSize, maxPrice) and sub-account equity to enforce exact exchange compliance for any order size — from $5 to $1,000,000+."
+description: "Exchange-native mathematical guardrail and routing engine for Binance Agent OS. Dynamically audits Binance exchangeInfo filters (minNotional, maxNotional, LOT_SIZE) and automatically routes sub-$5 micro-trades to Binance Convert to prevent rejection."
 ---
 
-# Binance Exchange-Native Risk Guardrails (Multi-Product)
+# Binance Exchange-Native Risk Guardrails & Smart Routing
 
-Acts as the automated compliance officer for Antigravity, strictly validating every order against **official Binance exchange filters** via `spot.exchangeInfo` and `futures_usds.exchangeInformation` before dispatching signed requests.
+Acts as the automated compliance and routing engine for Antigravity, strictly validating every order against **official Binance exchange filters** and dynamically routing sub-minimum orders to **Binance Convert**.
 
 ---
 
-## 1. Dynamic Binance Exchange Filter Auditing
+## 1. Dynamic Order Routing (< $5 USDT Auto-Convert)
 
-Never hardcode arbitrary limits. Query the exchange rules directly:
+Binance's Spot Matching Engine strictly requires a `MIN_NOTIONAL` (typically 5.00 USDT). When an order is below this threshold:
+- **Never fail or drop the trade**: Instead of throwing an error or letting Binance return `-1013 FILTER_FAILURE: MIN_NOTIONAL`, the agent automatically routes the trade through **Binance Convert** (`convert.sendQuoteRequest` & `convert.acceptQuote`).
+- **Binance Convert supports small dust and micro-amounts**: Convert enables instant swaps with zero orderbook fees and lower minimum notional limits than the orderbook spot engine.
+
+### Routing Decision Logic:
+```
+Target Trade Notional:
+├─ Notional < MIN_NOTIONAL (< $5.00 USDT)
+│    └─► Route to BINANCE CONVERT (convert.sendQuoteRequest -> convert.acceptQuote)
+│        Zero orderbook rejection, instant execution, zero slippage.
+│
+├─ $5.00 USDT <= Notional <= $100,000 USDT
+│    └─► Route to BINANCE SPOT (spot.newOrder)
+│        Standard limit/market order with precise LOT_SIZE and tickSize compliance.
+│
+└─ Notional > $100,000 USDT (Whale Execution)
+     └─► Audit spot.depth for liquidity, slice into TWAP/VWAP tranches to prevent market impact.
+```
+
+---
+
+## 2. Dynamic Binance Exchange Filter Auditing
 
 ### Spot Exchange Filters (`spot.exchangeInfo`):
-- **`MIN_NOTIONAL` / `NOTIONAL`**: Minimum order value (typically 5.00 USDT or 10.00 USDT on Binance). Orders below this are rejected by Binance matching engines.
+- **`MIN_NOTIONAL`**: Minimum order value (typically 5.00 USDT).
 - **`MAX_NOTIONAL`**: Maximum allowable single order value published by Binance for that pair.
-- **`LOT_SIZE`**:
-  - `minQty`: Minimum tradeable base asset quantity.
-  - `maxQty`: Maximum tradeable base asset quantity (millions for high-cap pairs).
-  - `stepSize`: Valid decimal precision interval (e.g., 0.001 BNB).
-- **`PRICE_FILTER`**:
-  - `minPrice`: Minimum order price.
-  - `maxPrice`: Maximum order price.
-  - `tickSize`: Valid tick rounding increment.
+- **`LOT_SIZE`**: Validates `minQty`, `maxQty`, and `stepSize` precision.
+- **`PRICE_FILTER`**: Validates `minPrice`, `maxPrice`, and `tickSize`.
 
-### Futures Exchange Filters (`futures_usds.exchangeInformation` & `futures_coin.exchangeInformation`):
-- **Contract Max Limits**: Symbol-specific leverage brackets and maximum position size tiers (e.g. tier 1 supports up to $5,000,000 notional; higher leverage reduces max position cap).
+### Futures Exchange Filters (`futures_usds.exchangeInformation`):
+- **Contract Max Limits**: Symbol-specific leverage brackets and maximum position size tiers.
 - **`MIN_NOTIONAL`**: Minimum contract notional (typically 5.00 USDT).
-- **`MARKET_LOT_SIZE`**: Maximum market order clip size to prevent orderbook slippage.
 
 ---
 
-## 2. Dynamic Capital Sizing & Whitelist Protocol
+## 3. Margin & Emergency Protocols
 
-1. **Available Balance Check**:
-   - Query `spot.getAccount` or `futures_usds.futuresAccountBalanceV3`.
-   - Ensure `orderNotional <= availableBalance` (Binance Hard Limit).
-2. **Whale / Large Order Execution**:
-   - For orders with notional > $100,000 USDT:
-     - Query `spot.depth` (limit: 50) to evaluate orderbook bid/ask depth and compute expected slippage.
-     - Recommend TWAP (Time-Weighted Average Price) or iceberging rather than aggressive single-clip market buys.
-3. **Margin Health Floor**:
-   - Cross-margin collateral ratio must remain >= 1.5 before any borrow or margin order.
-4. **Universal Emergency Protocol**:
-   - **Trigger**: User issues `/stop`, abnormal price flash crash, or account anomaly.
-   - **Action**: Immediately invoke:
-     - `spot.deleteOpenOrders` (all active spot orders)
-     - `futures_usds.currentAllOpenOrders` -> cancel via `futures_usds.cancelOrder`
-     - `margin.marginAccountCancelAllOpenOrdersOnASymbol`
+1. **Available Balance Check**: Ensure `orderNotional <= availableBalance` (Binance Hard Limit).
+2. **Margin Health Floor**: Cross-margin collateral ratio must remain >= 1.5 before any borrow or margin order.
+3. **Universal Emergency Protocol**:
+   - **Trigger**: User issues `/stop`, flash crash anomaly, or API error.
+   - **Action**: Immediately invoke `spot.deleteOpenOrders` and `futures_usds.cancelOrder`.

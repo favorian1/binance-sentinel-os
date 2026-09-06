@@ -1,10 +1,39 @@
 # 🎯 Agent Interaction Examples
 
-Real examples of Binance Sentinel-OS in action inside an AI client connected to Binance Agent OS MCP, utilizing dynamic Binance exchange filter validation.
+Real examples of Binance Sentinel-OS in action inside an AI client connected to Binance Agent OS MCP, showcasing smart micro-trade routing, exchange filter validation, and institutional execution.
 
 ---
 
-## 1. Real-Time Market Intelligence Across Spot & Futures
+## 1. Smart Micro-Trade Routing (< $5 USDT Auto-Convert)
+
+**Prompt:**
+```
+Sentinel: Buy $2.50 of BNB.
+```
+
+**Agent Response:**
+```
+🔄 Smart Micro-Trade Routing Triggered
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Target Amount: $2.50 USDT
+
+Exchange Rule Check:
+  • Spot matching engine requires MIN_NOTIONAL of 5.00 USDT.
+  • Auto-routing to Binance Convert (`convert.sendQuoteRequest`) to bypass orderbook limit.
+
+Conversion Execution:
+  • From: 2.50 USDT
+  • To:   0.0042 BNB
+  • Rate: 1 BNB = $595.20 USDT
+  • Fees: 0 USDT (Zero-slippage conversion)
+
+Quote accepted via `convert.acceptQuote`!
+0.0042 BNB credited to sub-account instantly. ✅
+```
+
+---
+
+## 2. Real-Time Market Intelligence Across Spot & Futures
 
 **Prompt:**
 ```
@@ -26,28 +55,6 @@ Technical:
 
 Regime: Mild bullish momentum. Spot and futures aligned.
 Exchange Filters: minNotional = 5.00 USDT | maxNotional = 5,000,000 USDT
-```
-
----
-
-## 2. Dynamic Exchange Filter Validation (Below Minimum Notional)
-
-**Prompt:**
-```
-Sentinel: Buy 0.001 BNB on spot.
-```
-
-**Agent Response:**
-```
-⚠️ Order Below Binance Minimum Notional
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Order: BUY 0.001 BNB @ ~$594.30
-Estimated Notional: $0.59 USDT
-
-Exchange Rule: `spot.exchangeInfo` requires MIN_NOTIONAL of 5.00 USDT.
-Action: Order held locally to prevent Binance rejection code -1013 (FILTER_FAILURE: MIN_NOTIONAL).
-
-Recommendation: Increase quantity to at least 0.01 BNB (~$5.94 USDT).
 ```
 
 ---
@@ -107,28 +114,7 @@ Estimated liquidation price: $399.80 (32% buffer ✅)
 
 ---
 
-## 5. Zero-Slippage Convert
-
-**Prompt:**
-```
-Sentinel: Get a quote to convert 500 USDT to BNB instantly.
-```
-
-**Agent Response:**
-```
-🔄 Binance Convert Quote
-━━━━━━━━━━━━━━━━━━━━━━
-From: 500.00 USDT
-To:   0.8403 BNB
-Rate: 1 BNB = $595.02
-Valid for: 15 seconds
-
-Confirm conversion? (yes/no)
-```
-
----
-
-## 6. Emergency Stop — All Products
+## 5. Emergency Stop — All Products
 
 **Prompt:**
 ```
